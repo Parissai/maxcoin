@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Parissai/maxcoin#readme",
   "dependencies": {
+    "mongodb": "^2.2.33",
     "request": "^2.85.0"
   }
 }

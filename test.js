@@ -25,6 +25,7 @@ function insertMongodb(collection, data) {
 }
 
 MongoClient.connect(dsn, (err, db) => {
+  console.time('mongodb');
   if (err) throw err;
   console.log("Connected successfully to MongoDB server");
   fetchFromAPI((err, data) => {
@@ -45,6 +46,7 @@ MongoClient.connect(dsn, (err, db) => {
               doc.value
             } and it was reached on ${doc.date}`
           );
+          console.timeEnd('mongodb');
           db.close();
         });
       })

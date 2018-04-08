@@ -16,12 +16,12 @@ function fetchFromAPI(callback) {
 }
 
 function insertMongodb(collection, data) {
-  const promisedInserts = [];  
+  const promisedInserts = [];
 
   Object.keys(data).forEach(key => {
-    promisedInserts.push(collection.insertOne({ date: key, value: data[key] }));
+    promisedInserts.push(collection.insertOne({ date: key, value: data[key] })); //.insertOne() inserts one document in mongodb and returns a promise
   });
-  return Promise.all(promisedInserts);  
+  return Promise.all(promisedInserts);
 }
 
 MongoClient.connect(dsn, (err, db) => {
@@ -36,7 +36,17 @@ MongoClient.connect(dsn, (err, db) => {
         console.log(
           `Successfully inserted ${result.length} document into mongodb`
         );
-        db.close();
+
+        const options = { sort: [["value", "desc"]] };    //"asc"
+        collection.findOne({}, options, (err, doc) => {
+          if (err) throw err;
+          console.log(
+            `MongoDB: The one month max value is ${
+              doc.value
+            } and it was reached on ${doc.date}`
+          );
+          db.close();
+        });
       })
       .catch(err => {
         console.log(err);
